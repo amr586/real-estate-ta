@@ -217,9 +217,10 @@ scripts/
 ## 📞 الدعم
 
 للحصول على الدعم:
-- البريد الإلكتروني: support@real-estate.com
-- الهاتف: +20 100 000 0000
-- الموقع: www.real-estate.com
+- البريد الإلكتروني: amrw4634@gmail.com
+- الهاتف: +20 1281378331 
+- الموقع:
+  https://55040cdc-8ca1-486b-b46e-9646ec1d7b6b-00-14w1k0gpo3ava.janeway.replit.dev/
 
 ## 📄 الترخيص
 
