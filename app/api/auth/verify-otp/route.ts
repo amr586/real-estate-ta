@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
 
     // Check if OTP is valid and not expired
     const result = await db.query(
-      `SELECT * FROM phone_verification_otp 
-       WHERE phone = $1 AND otp = $2 AND expires_at > NOW()`,
+      `SELECT * FROM otp_verifications 
+       WHERE phone = $1 AND otp_code = $2 AND expires_at > NOW() AND verified = false`,
       [phone, otp]
     );
 
@@ -28,13 +28,13 @@ export async function POST(request: NextRequest) {
 
     // Mark OTP as verified
     await db.query(
-      `UPDATE phone_verification_otp SET is_verified = true WHERE phone = $1`,
+      `UPDATE otp_verifications SET verified = true, verified_at = NOW() WHERE phone = $1`,
       [phone]
     );
 
     // Update user's phone number as verified
     await db.query(
-      `UPDATE users SET phone_verified = true WHERE phone = $1`,
+      `UPDATE users SET phone_verified = true, phone_verified_at = NOW() WHERE phone = $1`,
       [phone]
     );
 

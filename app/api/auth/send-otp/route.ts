@@ -23,9 +23,9 @@ export async function POST(request: NextRequest) {
 
     // Save OTP to database
     await db.query(
-      `INSERT INTO phone_verification_otp (phone, otp, expires_at) 
+      `INSERT INTO otp_verifications (phone, otp_code, expires_at) 
        VALUES ($1, $2, $3)
-       ON CONFLICT (phone) DO UPDATE SET otp = $2, expires_at = $3`,
+       ON CONFLICT (phone) DO UPDATE SET otp_code = $2, expires_at = $3, updated_at = NOW()`,
       [phone, otp, expiresAt]
     );
 
