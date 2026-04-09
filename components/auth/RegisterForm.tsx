@@ -77,8 +77,20 @@ export function RegisterForm() {
         return;
       }
 
-      toast.success('تم التسجيل بنجاح! جاري تحويلك...');
-      router.push('/dashboard');
+      // Send OTP to phone number
+      const otpResponse = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: formData.phone }),
+      });
+
+      if (otpResponse.ok) {
+        toast.success('تم التسجيل بنجاح! تحقق من رسائل WhatsApp');
+        router.push(`/verify-phone?phone=${encodeURIComponent(formData.phone)}`);
+      } else {
+        toast.success('تم التسجيل بنجاح! جاري تحويلك...');
+        router.push('/dashboard');
+      }
     } catch (error) {
       console.error('[RegisterForm] Error:', error);
       toast.error('حدث خطأ في الاتصال');
