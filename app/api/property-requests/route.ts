@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getConnection } from '@/lib/db';
+import { query as dbQuery } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
 
-    const connection = await getConnection();
-
     // Get user ID from session (simplified - you should implement proper session)
     const userId = 1; // This should come from actual session
 
-    const query = `
+    const queryText = `
       INSERT INTO property_requests (
         user_id,
         title,
@@ -30,7 +28,7 @@ export async function POST(request: NextRequest) {
       RETURNING id, created_at, status;
     `;
 
-    const result = await connection.query(query, [
+    const result = await dbQuery(queryText, [
       userId,
       data.title,
       data.description,
@@ -44,8 +42,6 @@ export async function POST(request: NextRequest) {
       data.bedrooms || null,
       'pending',
     ]);
-
-    connection.end();
 
     return NextResponse.json(
       {
@@ -65,9 +61,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const connection = await getConnection();
-
-    const query = `
+    const queryText = `
       SELECT 
         pr.*,
         u.email,
@@ -80,8 +74,7 @@ export async function GET(request: NextRequest) {
       ORDER BY pr.created_at DESC
     `;
 
-    const result = await connection.query(query);
-    connection.end();
+    const result = await dbQuery(queryText);
 
     return NextResponse.json(result.rows);
   } catch (error) {
