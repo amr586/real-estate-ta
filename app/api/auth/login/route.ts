@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     // Find user
     const userResult = await query(
-      'SELECT id, email, password_hash, first_name, last_name, role FROM users WHERE email = $1 AND is_active = true',
+      'SELECT id, email, phone, password_hash, first_name, last_name, role FROM users WHERE email = $1 AND is_active = true',
       [email]
     );
 
@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
         user: {
           id: user.id,
           email: user.email,
+          phone: user.phone,
           firstName: user.first_name,
           lastName: user.last_name,
           role: user.role,

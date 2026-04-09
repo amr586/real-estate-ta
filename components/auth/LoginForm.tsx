@@ -42,8 +42,22 @@ export function LoginForm() {
         return;
       }
 
-      toast.success('تم تسجيل الدخول بنجاح!');
-      router.push('/dashboard');
+      const data = await response.json();
+      
+      // Send OTP to phone number for verification
+      const otpResponse = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: data.phone }),
+      });
+
+      if (otpResponse.ok) {
+        toast.success('تم تسجيل الدخول! تحقق من رسائل WhatsApp');
+        router.push(`/verify-phone?phone=${encodeURIComponent(data.phone)}`);
+      } else {
+        toast.success('تم تسجيل الدخول بنجاح!');
+        router.push('/dashboard');
+      }
     } catch (error) {
       console.error('[LoginForm] Error:', error);
       toast.error('حدث خطأ في الاتصال');
